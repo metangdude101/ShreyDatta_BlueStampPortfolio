@@ -1,4 +1,4 @@
-# OpenAI Camera
+# Intensive Project: OpenAI Camera
 My OpenAI Camera uses the Adafruit Memento camera and connects to OpenAI to create text descriptions for images it takes in a variety of different ways. I aim to add a speaker, a way to send photos to other devices, and filters for photos.
 <!-- Update this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails! -->
 
@@ -74,8 +74,6 @@ void loop() {
 ```
 
 # Bill of Materials
-Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
-Don't forget to place the link of where to buy each component inside the quotation marks in the corresponding row after href =. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize this to your project needs. 
 
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
@@ -83,10 +81,28 @@ Don't forget to place the link of where to buy each component inside the quotati
 | 3.7V 420mAh Lithium Ion Polymer Battery | Power | $6.95 | <a href="https://www.adafruit.com/product/4236"> Link </a> |
 | 256MB Micro SD Card | Storing photos and text | $4.50 | <a href="https://www.adafruit.com/product/5251"> Link </a> |
 
-# Other Resources/Examples
+# Starter Project: Retro Arcade Console
+My starter project was a Retro Arcade Console soldering kit, where I practiced soldering correctly. I had some troubles in the beginning with placing parts in the wrong place, but by asking for help, I was able to fix the problems in my project.
+
+# Final Milestone
+
+**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+Throughout this project, I perfected my soldering skills and learned how to troubleshoot.
+I initially had some problems with assembly and alignment of parts, but managed to get through it.
+
+# Bill of Materials
+
+| **Part** | **Note** | **Price** | **Link** |
+|:--:|:--:|:--:|:--:|
+| DIY Soldering Project Game Kit Retro Classic Electronic Soldering Kit with 5 Retro Classic Games and Acrylic Case | Code for game, housing, and all parts neccesary | $24.99 | <a href="https://etoput.com/products/diy-soldering-project-game-kit-retro-classic-electronic-soldering-kit-with-5-retro-classic-games-and-acrylic-case"> Link </a> |
+<!-- # Other Resources/Examples
 One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
 - [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
 - [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
 - [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
 
-To watch the BSE tutorial on how to create a portfolio, click here.
+To watch the BSE tutorial on how to create a portfolio, click here. -->
