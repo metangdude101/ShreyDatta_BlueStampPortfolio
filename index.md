@@ -84,7 +84,7 @@ void loop() {
 # Starter Project: Retro Arcade Console
 My starter project was a Retro Arcade Console soldering kit, where I practiced soldering correctly. I had some troubles in the beginning with placing parts in the wrong place, but by asking for help, I was able to fix the problems in my project.
 
-![Headstone Image](logo.svg)
+![Headstone Image](20250618_115017.jpg)
 
 # Final Milestone
 
