@@ -48,8 +48,12 @@ For your second milestone, explain what you've worked on since your previous mil
 The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. When I received the parts for the project, I was surprised to see one board and a bunch of unassembled casing. It took me a little while to assemble the case around the board, but it wasn't super hard. However, installing CircuitPython on the board was much harder. Because the Memento board lacks a battery itself, it needs to be charged constantly in order to turn on. For some reason, whenever I plugged the board into my computer to install CircuitPython, my computer wouldn't recognize it as a USB device. After about an hour's worth of fiddling with it, I managed to finally transfer charge and upload CircuitPython to the board at the same time. 
 
 # Schematics 
-<img src="adafruit_products_schem.png">
-
+<img src="adafruit_products_schem (1).png">
+<a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
+<img src="adafruit_products_mementoSchem2.png">
+<a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
+<img src="adafruit_products_cam_schem.png">
+<a href="https://learn.adafruit.com/adafruit-ov5640-camera-breakout/downloads" target="_blank">Source</a>
 
 <!--
 # Code
