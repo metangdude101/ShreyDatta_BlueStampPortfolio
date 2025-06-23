@@ -14,7 +14,7 @@ My OpenAI Camera uses the Adafruit Memento camera and connects to OpenAI to crea
 
 <!-- **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.** -->
 
-![Headstone Image](ShreyD.jpg)
+<img src="ShreyD.jpg" width="1512" height="2016">
   
 <!-- # Final Milestone
 
@@ -83,7 +83,7 @@ My starter project was a Retro Arcade Console soldering kit, where I practiced s
 <iframe width="560" height="315" src="https://www.youtube.com/embed/QSVcFWAX7O8?si=au_ZTLx9YDTecXB0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
-<img src="20250618_115017cropped.jpg" width="451" height="600">
+<img src="20250618_115017cropped.jpg" width="226" height="300">
 
 
 This project marked the first time I had to solder anything. Naturally I had some problems in the beginning, but I've learned how to make and recognize good soldering work, after soldering dozens of joints. One of the challenges with this project was when I soldered something upside-down, a semi-permanent mistake that I had no idea how to fix. But, with the help of my instructors, I was able to fix the problem and create a finished product I'm happy with.
