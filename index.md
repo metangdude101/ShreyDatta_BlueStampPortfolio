@@ -51,9 +51,8 @@ The first milestone for my OpenAI Camera was its assembly and installing Circuit
 
 
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
-```c++
+```python
 import os
 import time
 import ssl
