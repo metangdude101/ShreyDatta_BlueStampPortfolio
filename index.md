@@ -14,7 +14,7 @@ My OpenAI Camera uses the Adafruit Memento camera and connects to OpenAI to crea
 
 <!-- **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.** -->
 
-<img src="ShreyD.jpg" width="1512" height="2016">
+<img src="ShreyD.jpg" width="378" height="504">
   
 <!-- # Final Milestone
 
