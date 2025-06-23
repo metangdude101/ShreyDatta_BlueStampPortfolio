@@ -91,7 +91,8 @@ My starter project was a mini retro arcade console. This project marked the firs
 
 # Schematics
 
-https://www.hackster.io/lewisdiy/build-your-own-game-console-kit-play-the-classic-games-5ca95f#schematics
+<img src="schematics-_WNfuLqZO8t.jpg">
+<a href="https://www.hackster.io/lewisdiy/build-your-own-game-console-kit-play-the-classic-games-5ca95f#schematics" target="_blank">Source</a>
 
 # Bill of Materials
 
