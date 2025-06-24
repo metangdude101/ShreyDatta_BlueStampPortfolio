@@ -29,7 +29,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 # Second Milestone
 
-<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/m5oPV_kyGF0?si=Vs4LNTCf7iLXl55b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 The second milestone for my OpenAI Camera was editing the code on the camera to make it more intuitive and add more features. The code that connected my camera to the OpenAI API lacked the ability to change the settings of the camera itself, so after some fiddling, I managed to add those features. The code for the camera is hard to understand, and documentation for it is few and far between. However, I can gladly say I understand it much better than when I began the project. All I have to do now is change or add new prompts to send to OpenAI for the camera, and maybe add another speaker or a battery pack.
 
