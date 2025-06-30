@@ -53,8 +53,9 @@ The first milestone for my OpenAI Camera was its assembly and installing Circuit
 # Code
 
 ```python
-import board
-
+# SPDX-FileCopyrightText: 2024 Liz Clark for Adafruit Industries
+#
+# SPDX-License-Identifier: MIT
 
 import os
 import time
@@ -70,6 +71,12 @@ from adafruit_display_text import label, wrap_text_to_lines
 import terminalio
 import adafruit_pycamera
 import random
+import neopixel
+import board
+
+"""
+A lot of the code in this project is from open-source code for the Memento Camera, mainly two projects, the OpenAI Camera and the Fancy Camera. Both of these projects are amazing by themselves, but both of them lack very important functionality, so I combined them to make a better script.
+"""
 
 # scale for displaying returned text from OpenAI
 text_scale = 1
@@ -79,10 +86,12 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 alt_text_prompt = os.getenv("ALT_TEXT_PROMPT")
 haiku_prompt = os.getenv("HAIKU_PROMPT")
 cable_prompt = os.getenv("CABLE_PROMPT")
-pokemon_prompt = os.getenv("POKEMON_PROMPT")
 translate_prompt = os.getenv("TRANSLATE_PROMPT")
 alien_prompt = os.getenv("ALIEN_PROMPT")
 weird_prompt = os.getenv("WEIRD_PROMPT")
+
+pokemon_prompt = os.getenv("POKEMON_PROMPT")
+translate_prompt = os.getenv("TRANSLATE_PROMPT")
 define_prompt=os.getenv("DEFINE_PROMPT")
 
 prompts = [alt_text_prompt,
@@ -107,7 +116,7 @@ def encode_image(image_path):
 
 # view returned text on MEMENTO screen
 def view_text(the_text):
-    rectangle = vectorio.Rectangle(pixel_shader=palette, width=190, height=120, x=25, y=60)
+    rectangle = vectorio.Rectangle(pixel_shader=palette, width=190, height=120, x=25, y=60, color_index=1)
     pycam.splash.append(rectangle)
     the_text = "\n".join(wrap_text_to_lines(the_text, 30))
     if prompt_index == 1:
@@ -174,43 +183,45 @@ print("Connected to WiFi")
 pool = socketpool.SocketPool(wifi.radio)
 requests = adafruit_requests.Session(pool, ssl.create_default_context())
 
-palette = displayio.Palette(1)
-palette[0] = 0x000000
+palette = displayio.Palette(2)
+palette[0] = 0xFFFFFF
+palette[1] = 0x000000
+
 decoder = JpegDecoder()
 # used for showing images from sd card
 bitmap = displayio.Bitmap(240, 176, 65535)
 
 pycam = adafruit_pycamera.PyCamera()
 
+# Startup tone for camera, currently commented out
 rand = random.randint(0,9)
-"""
-for i in range(0, rand):
-    pycam.tone(440, 0.1)
-    pycam.tone(880, 0.1)
+#for i in range(0, rand):
+#    pycam.tone(440, 0.1)
+#    pycam.tone(880, 0.1)
 
-if rand == 0:
-    pycam.tone(208, 0.4)
-    pycam.tone(349, 0.4)
-    pycam.tone(311, 0.4)
-    pycam.tone(262, 0.2)
-    pycam.tone(208, 0.2)
-    pycam.tone(233, 0.2)
-    pycam.tone(262, 0.2)
-    pycam.tone(233, 0.2)
-    pycam.tone(208, 0.2)
-    pycam.tone(175, 0.4)
-    pycam.tone(156, 0.4)
-else:
-    pycam.tone(831, 0.2)
-    pycam.tone(659, 0.2)
-    pycam.tone(831, 0.2)
-    pycam.tone(932, 0.2)
-    pycam.tone(1047, 0.2)
-    pycam.tone(932, 0.2)
-    pycam.tone(831, 0.2)
-    pycam.tone(659, 0.2)
-    pycam.tone(622, 0.4)
-"""
+#if rand == 0:
+#    pycam.tone(208, 0.4)
+#    pycam.tone(349, 0.4)
+#    pycam.tone(311, 0.4)
+#    pycam.tone(262, 0.2)
+#    pycam.tone(208, 0.2)
+#    pycam.tone(233, 0.2)
+#    pycam.tone(262, 0.2)
+#    pycam.tone(233, 0.2)
+#    pycam.tone(208, 0.2)
+#    pycam.tone(175, 0.4)
+#    pycam.tone(156, 0.4)
+#else:
+#    pycam.tone(831, 0.2)
+#    pycam.tone(659, 0.2)
+#    pycam.tone(831, 0.2)
+#    pycam.tone(932, 0.2)
+#    pycam.tone(1047, 0.2)
+#    pycam.tone(932, 0.2)
+#    pycam.tone(831, 0.2)
+#    pycam.tone(659, 0.2)
+#    pycam.tone(622, 0.4)
+
 pycam.mode = 0  # only mode 0 (JPEG) will work in this example
 
 # Resolution of 320x240 is plenty for OpenAI
@@ -218,16 +229,18 @@ pycam.resolution = 1  # 0-12 preset resolutions:
 #                      0: 240x240, 1: 320x240, 2: 640x480, 3: 800x600, 4: 1024x768,
 #                      5: 1280x720, 6: 1280x1024, 7: 1600x1200, 8: 1920x1080, 9: 2048x1536,
 #                      10: 2560x1440, 11: 2560x1600, 12: 2560x1920
+
+
 pycam.led_level = 0  # 0-4 preset brightness levels
 led_levels = (
     "No Light",
     "Level 1",
     "Level 2",
     "Level 3",
-    "Max\nLevel 4"
+    "Level 4"
 )
-
 current_level = 0
+
 # pycam.led_color = 0  # 0-7  preset colors: 0: white, 1: green, 2: yellow, 3: red,
 #                                          4: pink, 5: blue, 6: teal, 7: rainbow
 led_colors = (
@@ -235,9 +248,9 @@ led_colors = (
     "Green",
     "Yellow",
     "Red",
-    "Pink",
+    "Magenta",
     "Blue",
-    "Teal",
+    "Cyan",
     "Rainbow"
 )
 corr_colors= (
@@ -254,8 +267,8 @@ current_color = 0
 
 pycam.effect = 0  # 0-7 preset FX: 0: normal, 1: invert, 2: b&w, 3: red,
 #                                  4: green, 5: blue, 6: sepia, 7: solarize
-# sort image files by numeric order
 
+# sort image files by numeric order
 all_images = [
     f"/sd/{filename}"
     for filename in os.listdir("/sd")
@@ -263,13 +276,99 @@ all_images = [
     ]
 all_images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
 # add label for selected prompt
-rect = vectorio.Rectangle(pixel_shader=palette, width=120, height=20, x=120, y=0)
+rect = vectorio.Rectangle(pixel_shader=palette, width=240, height=20, x=120, y=0, color_index=1)
+recttwo = vectorio.Rectangle(pixel_shader=palette, width = 240, height=50, x=0, y=0, color_index=1)
+
+# Hand made lightning symbol
+pointlist=[(0,0), (-5, 13), (3, 15), (0, 24), (13, 11), (5, 9), (10, 0)]
+lightning = vectorio.Polygon(pixel_shader=palette, points=pointlist, x=210, y=5)
+
+# Inner lightning symbol that is turned black or white
+innerpointlist=[(1, 1), (-3, 12), (5, 14), (1, 22), (11, 12), (3, 10), (8, 1)]
+innerlightning = vectorio.Polygon(pixel_shader=palette, points=innerpointlist, x=210, y=5, color_index=1)
+
+# Text that displays prompt on screen
 prompt_txt = label.Label(
             terminalio.FONT, text=prompt_labels[prompt_index], color=0xFFFFFF, x=120, y=10, scale=2
         )
+
 # pylint: disable=protected-access
 pycam._botbar.append(rect)
 pycam._botbar.append(prompt_txt)
+
+pycam._topbar.append(recttwo)
+
+#pycam._topbar.append(led_txt)
+#pycam._topbar.append(color_txt)
+
+pycam._topbar.append(lightning)
+pycam._topbar.append(innerlightning)
+
+
+allcolors = displayio.Palette(15)
+allcolors[0]  = 0xFFFFFF
+allcolors[1]  = 0x00FF00
+allcolors[2]  = 0xFFFF00
+allcolors[3]  = 0xFF0000
+allcolors[4]  = 0xFF00FF
+allcolors[5]  = 0x0000FF
+allcolors[6]  = 0x00FFFF
+
+allcolors[7]  = 0x444444
+allcolors[8]  = 0x004400
+allcolors[9]  = 0x444400
+allcolors[10] = 0x440000
+allcolors[11] = 0x440044
+allcolors[12] = 0x000044
+allcolors[13] = 0x004444
+
+allcolors[14] = 0x000000
+
+barsx = 0
+
+# Colored bars that represent color and level of LED lighting
+bar1 = vectorio.Rectangle(pixel_shader=allcolors, width=12, height=24, x=5+barsx,  y=5, color_index=7)
+bar2 = vectorio.Rectangle(pixel_shader=allcolors, width=12, height=24, x=22+barsx, y=5, color_index=7)
+bar3 = vectorio.Rectangle(pixel_shader=allcolors, width=12, height=24, x=39+barsx, y=5, color_index=7)
+bar4 = vectorio.Rectangle(pixel_shader=allcolors, width=12, height=24, x=56+barsx, y=5, color_index=7)
+
+pycam._topbar.append(bar1)
+pycam._topbar.append(bar2)
+pycam._topbar.append(bar3)
+pycam._topbar.append(bar4)
+
+def updatebars():
+    global current_level
+    global current_color
+
+    bars = [7, 7, 7, 7]
+
+    if current_level > 0:
+        bars[0] -= 7
+    if current_level > 1:
+        bars[1] -= 7
+    if current_level > 2:
+        bars[2] -= 7
+    if current_level > 3:
+        bars[3] -= 7
+    
+    
+    if current_color != 7:
+        bars[0] += current_color
+        bars[1] += current_color
+        bars[2] += current_color
+        bars[3] += current_color
+    else:
+        bars[0] += 3
+        bars[1] += 2
+        bars[2] += 1
+        bars[3] += 5
+    
+    bar1.color_index = bars[0]
+    bar2.color_index = bars[1]
+    bar3.color_index = bars[2]
+    bar4.color_index = bars[3]
+
 # pylint: enable=protected-access
 pycam.display.refresh()
 
@@ -294,8 +393,8 @@ setting_displays = (
 )
 curr_setting = 0
 
+
 pycam.display_message("Flash Off", color=0xFFFFFF)
-time.sleep(1)
 
 while True:
     if new_prompt:
@@ -307,16 +406,17 @@ while True:
     if pycam.shutter.long_press:
         pycam.autofocus()
     if pycam.shutter.short_count:
-        try:
-            if flash:
+        if flash:
+                # turning on LEDs when the camera tries to take a photo
                 setattr(pycam, "led_level", 0)
-                setattr(pycam, "led_level", current_level)
+        setattr(pycam, "led_level", current_level)
 
-            pycam.display_message("snap", color=0x00DD00)
-            pycam.capture_jpeg()
+        try:    
+            
+
+            pycam.display_message("snap", color=0xFFFFFF)
+                    
             pycam.live_preview_mode()
-            if flash:
-                setattr(pycam, "led_level", 0)
         except TypeError as exception:
             pycam.display_message("Failed", color=0xFF0000)
             time.sleep(0.5)
@@ -324,7 +424,6 @@ while True:
         except RuntimeError as exception:
             pycam.display_message("Error\nNo SD Card", color=0xFF0000)
             time.sleep(0.5)
-
         all_images = [
         f"/sd/{filename}"
         for filename in os.listdir("/sd")
@@ -332,7 +431,7 @@ while True:
         ]
         all_images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
         the_image = all_images[-1]
-        pycam.display_message("OpenAI..", color=0x00DD00)
+        pycam.display_message("OpenAI..", color=0xFFFFFF)
         send_img(the_image, prompts[prompt_index])
         view = True
         if flash:
@@ -349,11 +448,21 @@ while True:
                 flash = not flash
                 if not flash:
                     setattr(pycam, "led_level", current_level)
+                    flash_txt.text = ""
+                    innerlightning.color_index = 1
+                    pycam.display.refresh()
                     pycam.display_message("Flash Off", color=0xFFFFFF)
                     time.sleep(0.25)
                 else:
                     setattr(pycam, "led_level", 0)
-                    current_level = 1
+                    if current_level == 0:
+                        current_level = 1
+                        led_txt.text = led_levels[current_level]
+                        updatebars()
+                        pycam.display.refresh()
+                    flash_txt.text = "F"
+                    innerlightning.color_index = 0
+                    pycam.display.refresh()
                     pycam.display_message("Flash On", color=0xFFFFFF)
                     time.sleep(0.25)
             else:
@@ -361,10 +470,17 @@ while True:
                 setattr(pycam, key, getattr(pycam, key) + 1)
                 if key == "led_color":
                     current_color = (current_color + 1) % len(led_colors)
+                    color_txt.text = led_colors[current_color]
+                    color_txt.color = corr_colors[current_color]
+                    updatebars()
+                    pycam.display.refresh()
                     pycam.display_message(led_colors[current_color], color=corr_colors[current_color])
                     time.sleep(0.25)
                 elif key == "led_level":
                     current_level = (current_level + 1) % len(led_levels)
+                    led_txt.text = led_levels[current_level]
+                    updatebars()
+                    pycam.display.refresh()
                     pycam.display_message(led_levels[current_level], color=0xFFFFFF)
                     time.sleep(0.25)
 
@@ -379,24 +495,40 @@ while True:
                 flash = not flash
                 if not flash:
                     setattr(pycam, "led_level", current_level)
+                    flash_txt.text = ""
+                    innerlightning.color_index = 1
+                    pycam.display.refresh()
                     pycam.display_message("Flash Off", color=0xFFFFFF)
                     time.sleep(0.25)
                 else:
                     setattr(pycam, "led_level", 0)
-                    current_level = 1
+                    if current_level == 0:
+                        current_level = 1
+                        led_txt.text = led_levels[current_level]
+                        updatebars()
+                        pycam.display.refresh()
+                    flash_txt.text = "F"
+                    innerlightning.color_index = 0
+                    pycam.display.refresh()
                     pycam.display_message("Flash On", color=0xFFFFFF)
                     time.sleep(0.25)
             else:
                 setattr(pycam, key, getattr(pycam, key) - 1)
                 if key == "led_color":
                     current_color = (current_color - 1) % len(led_colors)
+                    color_txt.text = led_colors[current_color]
+                    color_txt.color = corr_colors[current_color]
+                    updatebars()
+                    pycam.display.refresh()
                     pycam.display_message(led_colors[current_color], color=corr_colors[current_color])
                     time.sleep(0.25)
                 elif key == "led_level":
                     current_level = (current_level - 1) % len(led_levels)
+                    led_txt.text = led_levels[current_level]
+                    updatebars()
+                    pycam.display.refresh()
                     pycam.display_message(led_levels[current_level], color=0xFFFFFF)
                     time.sleep(0.25)
-
 
     if pycam.right.fell:
         if new_prompt:
@@ -457,9 +589,6 @@ while True:
             send_img(filename, prompts[prompt_index])
             new_prompt = False
             view = True
-
-
-
 ```
 
 # Bill of Materials
