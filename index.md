@@ -31,7 +31,19 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/m5oPV_kyGF0?si=Vs4LNTCf7iLXl55b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-The second milestone for my OpenAI Camera was editing the code on the camera to make it more intuitive and add more features. The code that connected my camera to the OpenAI API lacked the ability to change the settings of the camera itself, so after some fiddling, I managed to add those features. The code for the camera is hard to understand, and documentation for it is few and far between. However, I can gladly say I understand it much better than when I began the project. All I have to do now is change or add new prompts to send to OpenAI for the camera, and maybe add another speaker or a battery pack.
+The second milestone for my OpenAI Camera was focused on quality of life, including editing the code I already had for the camera to make it more intuitive to interact with, and adding more features people would want in a camera. 
+
+## Challenges
+
+The code I was given to use with my Adafruit Memento camera had the amazing ability to send photos over the wifi to OpenAI and get a response, but lacked the ability to change the camera settings itself. I had no idea how the code for the camera worked, and I had no idea how to add the ability for users to modify camera settings.
+
+## Solution
+
+I had no idea how to do this myself, so I looked at code people had already made for the camera. I found something called Fancy Camera, which had very intuitive controls for the camera and let the user change filters, resolution, LED level, and LED color, to name a few. After a lot of tinkering, I was able to seamlessly merge the two scripts together, making a camera that is both functional and easy to use.
+
+## Next Steps
+
+At this point, the camera works well, but it doesn't look the greatest, and doesn't have a lot of features. I also have to keep it constantly plugged in to a device, because it lacks a battery. To solve these problems, I will try to add symbols to the screen of the camera to make it easier to understand, and maybe try adding a battery pack to lengthen the life of the device without needing to be plugged in.
 
 # First Milestone
 
@@ -39,7 +51,19 @@ The second milestone for my OpenAI Camera was editing the code on the camera to 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/L-g1tkvBFc0?si=UEiRiNsshfH5kpLt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. When I received the parts for the project, I was surprised to see one board and a bunch of unassembled casing. It took me a little while to assemble the case around the board, but it wasn't super hard. However, installing CircuitPython on the board was much harder. Because the Memento board lacks a battery itself, it needs to be charged constantly in order to turn on. For some reason, whenever I plugged the board into my computer to install CircuitPython, my computer wouldn't recognize it as a USB device. After about an hour's worth of fiddling with it, I managed to finally transfer charge and upload CircuitPython to the board at the same time. 
+The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. The board had an enclosure that had the LEDs to add camera flash, and CircuitPython was needed to run any complex code on the camera. 
+
+## Challenges
+
+When I received the parts for the project, I was surprised to see one board and a bunch of unassembled casing. Additionally, I couldn't install CircuitPython onto the board. For the board to get CircuitPython, it needs to be plugged into a laptop and turned on. However, whenever I plugged the board into my laptop, it wouldn't turn on, no matter what I did. If the board didn't turn on, I could not get any code onto it, and the whole project would be over.
+
+## Solution
+
+It took me a little while to assemble the case around the board, but it wasn't super hard. For CircuitPython, I realized the issue was that my device was not recognizing when the board plugged into it. After tinkering with the USB cable connecting my device to the board, I realized if I plugged a specific end of the cable into my board, and then plugged the other end into my laptop, the board would turn on. After that, I was able to successfully install CircuitPython on the board.
+
+## Next Steps
+
+Right now, the board has a camera application that is very bare-bones and can't do anything. My next steps are to upload the code to the board, and maybe modify it to make it my own.
 
 # Schematics 
 <img src="adafruit_products_schem (1).png">
