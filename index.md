@@ -99,11 +99,18 @@ from adafruit_display_text import label, wrap_text_to_lines
 import terminalio
 import adafruit_pycamera
 import random
-import neopixel
-import board
+import asyncio
 
 """
+
 A lot of the code in this project is from open-source code for the Memento Camera, mainly two projects, the OpenAI Camera and the Fancy Camera. Both of these projects are amazing by themselves, but both of them lack very important functionality, so I combined them to make a better script.
+
+"""
+
+"""
+
+This section is basically configuring settings before the camera turns on, so everything works properly.
+
 """
 
 # scale for displaying returned text from OpenAI
@@ -122,6 +129,7 @@ pokemon_prompt = os.getenv("POKEMON_PROMPT")
 translate_prompt = os.getenv("TRANSLATE_PROMPT")
 define_prompt=os.getenv("DEFINE_PROMPT")
 
+# Putting all the prompts in a list
 prompts = [alt_text_prompt,
            haiku_prompt,
            define_prompt,
@@ -131,124 +139,48 @@ prompts = [alt_text_prompt,
            weird_prompt]
 num_prompts = len(prompts)
 prompt_index = 0
+# Adding labels for the prompts that will show up on the screen
 prompt_labels = ["Alt Text", "Haiku", "Define", "Pokedex", "Cable ID","Translate", "Weird"]
 
+
+# Setting flash to be off by default
 flash = False
-
-# encode jpeg to base64 for OpenAI
-def encode_image(image_path):
-    with open(image_path, 'rb') as image_file:
-        image_data = image_file.read()
-        base64_encoded_data = binascii.b2a_base64(image_data).decode('utf-8').rstrip()
-        return base64_encoded_data
-
-# view returned text on MEMENTO screen
-def view_text(the_text):
-    rectangle = vectorio.Rectangle(pixel_shader=palette, width=190, height=120, x=25, y=60, color_index=1)
-    pycam.splash.append(rectangle)
-    the_text = "\n".join(wrap_text_to_lines(the_text, 30))
-    if prompt_index == 1:
-        the_text = the_text.replace("*", "\n")
-    text_area = label.Label(terminalio.FONT, text=the_text,
-                            color=0xFFFFFF, x=30, y=70, scale=text_scale)
-    pycam.splash.append(text_area)
-    pycam.display.refresh()
-
-# send image to OpenAI, print the returned text and save it as a text file
-def send_img(img, prompt):
-    base64_image = encode_image(img)
-    headers = {
-      "Content-Type": "application/json",
-      "Authorization": f"Bearer {openai_api_key}"
-    }
-    payload = {
-      "model": "gpt-4-turbo",
-      "messages": [
-        {
-          "role": "user",
-          "content": [
-            {
-              "type": "text",
-              "text": f"{prompt}"
-            },
-            {
-              "type": "image_url",
-              "image_url": {
-                "url": f"data:image/jpeg;base64,{base64_image}"
-              }
-            }
-          ]
-        }
-      ],
-      "max_tokens": 300
-    }
-    response = requests.post("https://api.openai.com/v1/chat/completions",
-                             headers=headers, json=payload)
-    json_openai = response.json()
-    print(json_openai['choices'][0]['message']['content'])
-    alt_text_file = img.replace('jpg', 'txt')
-    alt_text_file = alt_text_file[:11] + f"_{prompt_labels[prompt_index]}" + alt_text_file[11:]
-    if prompt_index == 5:
-        alt_text_file = alt_text_file.replace("?", "")
-    with open(alt_text_file, "a") as fp:
-        fp.write(json_openai['choices'][0]['message']['content'])
-        fp.flush()
-        time.sleep(1)
-        fp.close()
-    view_text(json_openai['choices'][0]['message']['content'])
-# view images on sd card to re-send to OpenAI
-def load_image(bit, file):
-    bit.fill(0b00000_000000_00000)  # fill with a middle grey
-    decoder.open(file)
-    decoder.decode(bit, scale=0, x=0, y=0)
-    pycam.blit(bit, y_offset=32)
-    pycam.display.refresh()
-
-print()
-print("Connecting to WiFi")
-wifi.radio.connect(os.getenv('CIRCUITPY_WIFI_SSID'), os.getenv('CIRCUITPY_WIFI_PASSWORD'))
-print("Connected to WiFi")
-pool = socketpool.SocketPool(wifi.radio)
-requests = adafruit_requests.Session(pool, ssl.create_default_context())
 
 palette = displayio.Palette(2)
 palette[0] = 0xFFFFFF
 palette[1] = 0x000000
 
-decoder = JpegDecoder()
-# used for showing images from sd card
-bitmap = displayio.Bitmap(240, 176, 65535)
-
 pycam = adafruit_pycamera.PyCamera()
 
 # Startup tone for camera, currently commented out
 rand = random.randint(0,9)
-#for i in range(0, rand):
-#    pycam.tone(440, 0.1)
-#    pycam.tone(880, 0.1)
+rand2 = random.randint(0,99)
 
-#if rand == 0:
-#    pycam.tone(208, 0.4)
-#    pycam.tone(349, 0.4)
-#    pycam.tone(311, 0.4)
-#    pycam.tone(262, 0.2)
-#    pycam.tone(208, 0.2)
-#    pycam.tone(233, 0.2)
-#    pycam.tone(262, 0.2)
-#    pycam.tone(233, 0.2)
-#    pycam.tone(208, 0.2)
-#    pycam.tone(175, 0.4)
-#    pycam.tone(156, 0.4)
-#else:
-#    pycam.tone(831, 0.2)
-#    pycam.tone(659, 0.2)
-#    pycam.tone(831, 0.2)
-#    pycam.tone(932, 0.2)
-#    pycam.tone(1047, 0.2)
-#    pycam.tone(932, 0.2)
-#    pycam.tone(831, 0.2)
-#    pycam.tone(659, 0.2)
-#    pycam.tone(622, 0.4)
+if rand2 == 0:
+    if rand == 0:
+        pycam.tone(208, 0.4)
+        pycam.tone(349, 0.4)
+        pycam.tone(311, 0.4)
+        pycam.tone(262, 0.2)
+        pycam.tone(208, 0.2)
+        pycam.tone(233, 0.2)
+        pycam.tone(262, 0.2)
+        pycam.tone(233, 0.2)
+        pycam.tone(208, 0.2)
+        pycam.tone(175, 0.4)
+        pycam.tone(156, 0.4)
+    else:
+        pycam.tone(831, 0.2)
+        pycam.tone(659, 0.2)
+        pycam.tone(831, 0.2)
+        pycam.tone(932, 0.2)
+        pycam.tone(1047, 0.2)
+        pycam.tone(932, 0.2)
+        pycam.tone(831, 0.2)
+        pycam.tone(659, 0.2)
+        pycam.tone(622, 0.4)
+else:
+    pycam.tone(330/2, 0.2)
 
 pycam.mode = 0  # only mode 0 (JPEG) will work in this example
 
@@ -295,34 +227,57 @@ current_color = 0
 
 pycam.effect = 0  # 0-7 preset FX: 0: normal, 1: invert, 2: b&w, 3: red,
 #                                  4: green, 5: blue, 6: sepia, 7: solarize
+effects = (
+    "None",
+    "Invert",
+    "B & W",
+    "Red",
+    "Green",
+    "Blue",
+    "Sepia",
+    "Solarize"
+)
 
-# sort image files by numeric order
-all_images = [
-    f"/sd/{filename}"
-    for filename in os.listdir("/sd")
-    if filename.lower().endswith(".jpg")
-    ]
-all_images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
+effect_colors = (
+    0xFFFFFF,
+    0xFFFFFF,
+    0x555555,
+    0xFF0000,
+    0x00FF00,
+    0x0000FF,
+    0x995500,
+    0xFF6600
+)
+
+current_effect = 0
+
 # add label for selected prompt
-rect = vectorio.Rectangle(pixel_shader=palette, width=240, height=20, x=120, y=0, color_index=1)
+rect = vectorio.Rectangle(pixel_shader=palette, width=240, height=50, x=0, y=-10, color_index=1)
 recttwo = vectorio.Rectangle(pixel_shader=palette, width = 240, height=50, x=0, y=0, color_index=1)
+
+lightningx = 195
 
 # Hand made lightning symbol
 pointlist=[(0,0), (-5, 13), (3, 15), (0, 24), (13, 11), (5, 9), (10, 0)]
-lightning = vectorio.Polygon(pixel_shader=palette, points=pointlist, x=210, y=5)
+lightning = vectorio.Polygon(pixel_shader=palette, points=pointlist, x=210-lightningx, y=5)
 
 # Inner lightning symbol that is turned black or white
 innerpointlist=[(1, 1), (-3, 12), (5, 14), (1, 22), (11, 12), (3, 10), (8, 1)]
-innerlightning = vectorio.Polygon(pixel_shader=palette, points=innerpointlist, x=210, y=5, color_index=1)
+innerlightning = vectorio.Polygon(pixel_shader=palette, points=innerpointlist, x=210-lightningx, y=5, color_index=1)
 
 # Text that displays prompt on screen
 prompt_txt = label.Label(
             terminalio.FONT, text=prompt_labels[prompt_index], color=0xFFFFFF, x=120, y=10, scale=2
         )
 
+effect_txt = label.Label(
+            terminalio.FONT, text=effects[current_effect], color=effect_colors[current_effect], x=10, y=10, scale=2
+        )
+
 # pylint: disable=protected-access
 pycam._botbar.append(rect)
 pycam._botbar.append(prompt_txt)
+pycam._botbar.append(effect_txt)
 
 pycam._topbar.append(recttwo)
 
@@ -352,7 +307,7 @@ allcolors[13] = 0x004444
 
 allcolors[14] = 0x000000
 
-barsx = 0
+barsx = 35
 
 # Colored bars that represent color and level of LED lighting
 bar1 = vectorio.Rectangle(pixel_shader=allcolors, width=12, height=24, x=5+barsx,  y=5, color_index=7)
@@ -421,6 +376,112 @@ setting_displays = (
 )
 curr_setting = 0
 
+"""
+
+This next section is the code for sending the image to OpenAI.
+Most of it comes from the OpenAI Camera source code from Adafruit.
+I have barely edited this, so it should work without much error.
+
+"""
+
+# sort image files by numeric order
+all_images = [
+    f"/sd/{filename}"
+    for filename in os.listdir("/sd")
+    if filename.lower().endswith(".jpg")
+    ]
+all_images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
+
+decoder = JpegDecoder()
+# used for showing images from sd card
+bitmap = displayio.Bitmap(240, 176, 65535)
+
+# encode jpeg to base64 for OpenAI
+def encode_image(image_path):
+    with open(image_path, 'rb') as image_file:
+        image_data = image_file.read()
+        base64_encoded_data = binascii.b2a_base64(image_data).decode('utf-8').rstrip()
+        return base64_encoded_data
+
+# view returned text on MEMENTO screen
+def view_text(the_text):
+    rectangle = vectorio.Rectangle(
+        pixel_shader=palette, width=190, height=120, x=25, y=60, color_index=1
+    )
+    pycam.splash.append(rectangle)
+    the_text = "\n".join(wrap_text_to_lines(the_text, 30))
+    if prompt_index == 1:
+        the_text = the_text.replace("*", "\n")
+    text_area = label.Label(terminalio.FONT, text=the_text,
+                            color=0xFFFFFF, x=30, y=70, scale=text_scale)
+    pycam.splash.append(text_area)
+    pycam.display.refresh()
+
+# send image to OpenAI, print the returned text and save it as a text file
+def send_img(img, prompt):
+    base64_image = encode_image(img)
+    headers = {
+      "Content-Type": "application/json",
+      "Authorization": f"Bearer {openai_api_key}"
+    }
+    payload = {
+      "model": "gpt-4-turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": f"{prompt} Limit your response to 210 characters."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": f"data:image/jpeg;base64,{base64_image}"
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 300
+    }
+    response = requests.post("https://api.openai.com/v1/chat/completions",
+                             headers=headers, json=payload)
+    json_openai = response.json()
+    print(json_openai['choices'][0]['message']['content'])
+    alt_text_file = img.replace('jpg', 'txt')
+    alt_text_file = alt_text_file[:11] + f"_{prompt_labels[prompt_index]}" + alt_text_file[11:]
+    if prompt_index == 5:
+        alt_text_file = alt_text_file.replace("?", "")
+    with open(alt_text_file, "a") as fp:
+        fp.write(json_openai['choices'][0]['message']['content'])
+        fp.flush()
+        time.sleep(1)
+        fp.close()
+    view_text(json_openai['choices'][0]['message']['content'])
+# view images on sd card to re-send to OpenAI
+def load_image(bit, file):
+    bit.fill(0b00000_000000_00000)  # fill with a middle grey
+    decoder.open(file)
+    decoder.decode(bit, scale=0, x=0, y=0)
+    pycam.blit(bit, y_offset=32)
+    pycam.display.refresh()
+
+print()
+print("Connecting to WiFi")
+wifi.radio.connect(
+    os.getenv('CIRCUITPY_WIFI_SSID'),
+    os.getenv('CIRCUITPY_WIFI_PASSWORD')
+)
+print("Connected to WiFi")
+pool = socketpool.SocketPool(wifi.radio)
+requests = adafruit_requests.Session(pool, ssl.create_default_context())
+
+"""
+
+The next section of code is what the camera does after everything is set up properly
+
+"""
 
 pycam.display_message("Flash Off", color=0xFFFFFF)
 
@@ -432,18 +493,23 @@ while True:
             pycam.blit(pycam.continuous_capture())
     pycam.keys_debounce()
     if pycam.shutter.long_press:
+        pycam.tone(330/2, 0.4)
         pycam.autofocus()
     if pycam.shutter.short_count:
-        if flash:
+        pycam.tone(330/2, 0.2)
+        pycam.tone(396/2, 0.2)
+        pycam.tone(495/2, 0.2)
+        pycam.tone(587/2, 0.2)
+
+
+        try:
+            if flash:
                 # turning on LEDs when the camera tries to take a photo
                 setattr(pycam, "led_level", 0)
-        setattr(pycam, "led_level", current_level)
-
-        try:    
-            
-
+                setattr(pycam, "led_level", current_level)
+            pycam.live_preview_mode()
+            pycam.capture_jpeg()
             pycam.display_message("snap", color=0xFFFFFF)
-                    
             pycam.live_preview_mode()
         except TypeError as exception:
             pycam.display_message("Failed", color=0xFF0000)
@@ -461,6 +527,10 @@ while True:
         the_image = all_images[-1]
         pycam.display_message("OpenAI..", color=0xFFFFFF)
         send_img(the_image, prompts[prompt_index])
+        pycam.tone(587/2, 0.2)
+        pycam.tone(495/2, 0.2)
+        pycam.tone(396/2, 0.2)
+        pycam.tone(330/2, 0.2)
         view = True
         if flash:
             setattr(pycam, "led_level", 0)
@@ -476,7 +546,6 @@ while True:
                 flash = not flash
                 if not flash:
                     setattr(pycam, "led_level", current_level)
-                    flash_txt.text = ""
                     innerlightning.color_index = 1
                     pycam.display.refresh()
                     pycam.display_message("Flash Off", color=0xFFFFFF)
@@ -485,10 +554,8 @@ while True:
                     setattr(pycam, "led_level", 0)
                     if current_level == 0:
                         current_level = 1
-                        led_txt.text = led_levels[current_level]
                         updatebars()
                         pycam.display.refresh()
-                    flash_txt.text = "F"
                     innerlightning.color_index = 0
                     pycam.display.refresh()
                     pycam.display_message("Flash On", color=0xFFFFFF)
@@ -498,19 +565,22 @@ while True:
                 setattr(pycam, key, getattr(pycam, key) + 1)
                 if key == "led_color":
                     current_color = (current_color + 1) % len(led_colors)
-                    color_txt.text = led_colors[current_color]
-                    color_txt.color = corr_colors[current_color]
                     updatebars()
                     pycam.display.refresh()
                     pycam.display_message(led_colors[current_color], color=corr_colors[current_color])
                     time.sleep(0.25)
                 elif key == "led_level":
                     current_level = (current_level + 1) % len(led_levels)
-                    led_txt.text = led_levels[current_level]
                     updatebars()
                     pycam.display.refresh()
                     pycam.display_message(led_levels[current_level], color=0xFFFFFF)
                     time.sleep(0.25)
+                elif key == "effect":
+                    current_effect = (current_effect + 1) % len(effects)
+                    effect_txt.text = effects[current_effect]
+                    effect_txt.color = effect_colors[current_effect]
+                    pycam.display.refresh()
+                    pycam.display_message(effects[current_effect], color=effect_colors[current_effect])
 
     if pycam.down.fell:
         key = settings[curr_setting]
@@ -523,7 +593,6 @@ while True:
                 flash = not flash
                 if not flash:
                     setattr(pycam, "led_level", current_level)
-                    flash_txt.text = ""
                     innerlightning.color_index = 1
                     pycam.display.refresh()
                     pycam.display_message("Flash Off", color=0xFFFFFF)
@@ -532,10 +601,8 @@ while True:
                     setattr(pycam, "led_level", 0)
                     if current_level == 0:
                         current_level = 1
-                        led_txt.text = led_levels[current_level]
                         updatebars()
                         pycam.display.refresh()
-                    flash_txt.text = "F"
                     innerlightning.color_index = 0
                     pycam.display.refresh()
                     pycam.display_message("Flash On", color=0xFFFFFF)
@@ -544,19 +611,22 @@ while True:
                 setattr(pycam, key, getattr(pycam, key) - 1)
                 if key == "led_color":
                     current_color = (current_color - 1) % len(led_colors)
-                    color_txt.text = led_colors[current_color]
-                    color_txt.color = corr_colors[current_color]
                     updatebars()
                     pycam.display.refresh()
                     pycam.display_message(led_colors[current_color], color=corr_colors[current_color])
                     time.sleep(0.25)
                 elif key == "led_level":
                     current_level = (current_level - 1) % len(led_levels)
-                    led_txt.text = led_levels[current_level]
                     updatebars()
                     pycam.display.refresh()
                     pycam.display_message(led_levels[current_level], color=0xFFFFFF)
                     time.sleep(0.25)
+                elif key == "effect":
+                    current_effect = (current_effect - 1) % len(effects)
+                    effect_txt.text = effects[current_effect]
+                    effect_txt.color = effect_colors[current_effect]
+                    pycam.display.refresh()
+                    pycam.display_message(effects[current_effect], color=effect_colors[current_effect])
 
     if pycam.right.fell:
         if new_prompt:
