@@ -69,6 +69,11 @@ It took me a little while to assemble the case around the board, but it wasn't s
 
 Right now, the board has a camera application that is very bare-bones and can't do anything. My next steps are to upload the code to the board, and maybe modify it to make it my own.
 
+## Images
+<img src="20250709_100959.png" width=378 height=504>
+<img src="20250709_101010.png" width=378 height=504>
+<img src="20250709_101029.png" width-378 height=504>
+
 # Schematics 
 <img src="adafruit_products_schem (1).png">
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
