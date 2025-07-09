@@ -43,6 +43,8 @@ The code I was given to use with my Adafruit Memento camera had the amazing abil
 
 I had no idea how to do this myself, so I looked at code people had already made for the camera. I found something called Fancy Camera, which had very intuitive controls for the camera and let the user change filters, resolution, LED level, and LED color, to name a few. After a lot of tinkering, I was able to seamlessly merge the two scripts together, making a camera that is both functional and easy to use.
 
+<img src="Untitled drawing (11).png" width="378" height="504">
+
 ## Next Steps
 
 At this point, the camera works well, but it doesn't look the greatest, and doesn't have a lot of features. I also have to keep it constantly plugged in to a device, because it lacks a battery. To solve these problems, I will try to add symbols to the screen of the camera to make it easier to understand, and maybe try adding a battery pack to lengthen the life of the device without needing to be plugged in.
