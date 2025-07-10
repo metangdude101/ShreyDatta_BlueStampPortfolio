@@ -4,6 +4,7 @@ My OpenAI Camera uses the Adafruit Memento camera and connects to OpenAI to crea
 
 <!-- You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions: -->
 
+<embed src="https://minecraft-eaglercraft.github.io/go/minecraft-1.5.2/" style="width:1000px; height: 1000px;">
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
