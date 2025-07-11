@@ -58,7 +58,7 @@ At this point, the camera works well, but it doesn't look the greatest, and does
 
 ## Summary
 
-The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. The board had an enclosure that had the LEDs to add camera flash, and CircuitPython was needed to run any complex code on the camera. 
+The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. When I got the board, it had a very basic app running on it, and its enclosure came seperately. I had to screw on both sides of the enclosure, and connect the camera to my laptop to install CircuitPython on it.
 
 ## Challenges
 
