@@ -34,7 +34,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 ## Summary
 
-The second milestone for my OpenAI Camera was focused on quality of life, including editing the code I already had for the camera to make it more intuitive to interact with, and adding more features people would want in a camera. 
+The second milestone for my OpenAI Camera was focused on quality of life, including editing the code I already had for the camera to make it more intuitive to interact with, and adding more features people would want in a camera. The features I've added are; a countdown timer of various lengths, a flash setting, custom displays for each setting, a bottom status bar that details how the camera works, and randomized messages from the Memento so it has more of a personality.
 
 ## Challenges
 
@@ -44,7 +44,7 @@ The instructions for my project detailed uploading a prewritten program to my Me
 
 ## Next Steps
 
-At this point, the camera works well, but it doesn't look the greatest, and doesn't have a lot of features. I also have to keep it constantly plugged in to a device, because it lacks a battery. To solve these problems, I will try to add symbols to the screen of the camera to make it easier to understand, and maybe try adding a battery pack to lengthen the life of the device without needing to be plugged in.
+The camera, despite having an enclosure, is still quite exposed. It's really easy to access the inside of the board, or mess with the SD card, so I think my next milestone will be 3D printing a case. With a case, I can protect the camera much more, and I can make it much easier to hold.
 
 # First Milestone
 
@@ -54,7 +54,7 @@ At this point, the camera works well, but it doesn't look the greatest, and does
 
 ## Summary
 
-The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. When I got the board, it had a very basic app running on it, and its enclosure came seperately. I had to screw on both sides of the enclosure, and connect the camera to my laptop to install CircuitPython on it.
+The first milestone for my OpenAI Camera was its assembly and installing CircuitPython on it. When I received my project, the board lacked an enclosure, which I had to assemble myself. In addition, the camera had a very bare bones app running on it, so I had to install CircuitPython, a version of Python suitable for microcontrollers, so I could install a much better camera app.
 
 ## Challenges
 
@@ -62,7 +62,7 @@ Going into this project, I thought I would receive my Memento fully assembled, a
 
 ## Next Steps
 
-Right now, the board has a camera application that is very bare-bones and can't do anything. My next steps are to upload the code to the board, and maybe modify it to make it my own.
+Right now, the board has a camera application that is very bare bones and can't edit any of its own settings. My next steps are to upload the OpenAI Camera program to the board so it can send photos to OpenAI, and maybe edit it so the project becomes more of my own.
 
 ## Images
 <img src="20250709_100959.png" width=378 height=504>
