@@ -36,7 +36,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 The second milestone for my OpenAI Camera was focused on quality of life, including editing the code I already had for the camera to make it more intuitive to interact with, and adding more features people would want in a camera, because it lacked many things. I combined the code I was given from the OpenAI Camera program with the code from the Fancy Camera program to add the ability to change settings, and on top of that I added more features. The features I've added are: a countdown timer of various lengths, a flash setting, custom displays for each setting, a bottom status bar that details how the camera works, and randomized messages from the Memento so it has more of a personality.
 
-<img src="Untitled drawing (11).png" width="500" height="500">
+<img src="Untitled drawing (11).png" width="600" height="600">
 A diagram showcasing how I combined the OpenAI Camera code and the Fancy Camera code to create my own code, which had features from both programs.
 <a href="https://learn.adafruit.com/openai-image-descriptors-with-memento/circuitpython-code" target="_blank">OpenAI Camera</a>
 <a href="https://learn.adafruit.com/memento-camera-quick-start-guide/fancy-camera" target="_blank">Fancy Camera</a>
