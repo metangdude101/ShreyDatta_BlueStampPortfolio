@@ -38,13 +38,9 @@ The second milestone for my OpenAI Camera was focused on quality of life, includ
 
 ## Challenges
 
-The code I was given to use with my Adafruit Memento camera had the amazing ability to send photos over the wifi to OpenAI and get a response, but lacked the ability to change the camera settings itself. I had no idea how the code for the camera worked, and I had no idea how to add the ability for users to modify camera settings.
+The instructions for my project detailed uploading a prewritten program to my Memento camera, and then it would be able to send images over the wifi to OpenAI. Doing that was fairly easy, but after installing the program, I realized it lacked many functionalities, like changing any of the camera's settings. I didn't want my camera to have very little functionality, so I looked up solutions to add the ability to change in-built camera settings. I found another program, called Fancy Camera, that had very intuitive controls and the ability to change many settings. At first, I didn't understand how the code for the OpenAI Camera or the Fancy Camera worked, so I had to find and look at a lot of documentation to figure out what was happening. It took a little while to seamlessly combine both programs, but I was able to do it without many hiccups. 
 
-## Solution
-
-I had no idea how to do this myself, so I looked at code people had already made for the camera. I found something called Fancy Camera, which had very intuitive controls for the camera and let the user change filters, resolution, LED level, and LED color, to name a few. After a lot of tinkering, I was able to seamlessly merge the two scripts together, making a camera that is both functional and easy to use.
-
-<img src="Untitled drawing (11).png" width="378" height="504">
+<img src="Untitled drawing (11).png" width="500" height="500">
 
 ## Next Steps
 
@@ -62,11 +58,7 @@ The first milestone for my OpenAI Camera was its assembly and installing Circuit
 
 ## Challenges
 
-When I received the parts for the project, I was surprised to see one board and a bunch of unassembled casing. Additionally, I couldn't install CircuitPython onto the board. For the board to get CircuitPython, it needs to be plugged into a laptop and turned on. However, whenever I plugged the board into my laptop, it wouldn't turn on, no matter what I did. If the board didn't turn on, I could not get any code onto it, and the whole project would be over.
-
-## Solution
-
-It took me a little while to assemble the case around the board, but it wasn't super hard. For CircuitPython, I realized the issue was that my device was not recognizing when the board plugged into it. After tinkering with the USB cable connecting my device to the board, I realized if I plugged a specific end of the cable into my board, and then plugged the other end into my laptop, the board would turn on. After that, I was able to successfully install CircuitPython on the board.
+Going into this project, I thought I would receive my Memento fully assembled, and ready to install CircuitPython on. However, when I actually started this project, I found out that the board for the Memento and its enclosure needed to be assembled. The enclosure was two plates that I could screw on onto the top and bottom of the board. The enclosure plate that I could screw on to the camera side had a ring of Neopixels on it, that needed to be connected to the board with wiring so I could control them. Luckily, the assembly wasn't that hard. The next step for setting up the Memento was to install CircuitPython on it. Normally, this would be an easy task. The Memento typically has its own lithium ion battery, which provides power automatically. To install CircuitPython, the Memento just has to be connected to a Laptop via USB, and then CircuitPython can be installed. However, I wasn't allowed to use a lithium ion battery, so my Memento's one USB-C port was always used to power it, not to transfer data. For some reason, whenever I plugged my Memento into my laptop, it wouldn't turn on, and the laptop wouldn't recognize it as a USB device. After a lot of fiddling with the cable, I figured out when I plugged in a specific end of the cable into my Memento first, and then the other end into my laptop, the Memento would turn on and be connected. I don't know exactly why it works, but I was able to install CircuitPython with no other hiccups.
 
 ## Next Steps
 
