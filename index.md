@@ -78,13 +78,13 @@ Right now, the board has a camera application that is very bare bones and can't 
 <p>An image of my Memento from the side with the ports and the MicroSD card.</p>
 
 # Schematics 
-<img src="adafruit_products_schem (1).png">
+<img src="adafruit_products_schem (1).png" width=640 height=427>
 A schematic of most of the modules on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
-<img src="adafruit_products_mementoSchem2.png">
+<img src="adafruit_products_mementoSchem2.png" width=640 height=427>
 A second schematic containing more modules on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
-<img src="adafruit_products_cam_schem.png">
+<img src="adafruit_products_cam_schem.png" width=640 height=427>
 A third schematic that is about the camera on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-ov5640-camera-breakout/downloads" target="_blank">Source</a>
 
