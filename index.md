@@ -37,10 +37,15 @@ For your final milestone, explain the outcome of your project. Key details to in
 The second milestone for my OpenAI Camera was focused on quality of life, including editing the code I already had for the camera to make it more intuitive to interact with, and adding more features people would want in a camera, because it lacked many things. I combined the code I was given from the OpenAI Camera program with the code from the Fancy Camera program to add the ability to change settings, and on top of that I added more features. The features I've added are: a countdown timer of various lengths, a flash setting, custom displays for each setting, a bottom status bar that details how the camera works, and randomized messages from the Memento so it has more of a personality.
 
 <img src="Untitled drawing (11).png" width="500" height="500">
+A diagram showcasing how I combined the OpenAI Camera code and the Fancy Camera code to create my own code, which had features from both programs.
+<a href="https://learn.adafruit.com/openai-image-descriptors-with-memento/circuitpython-code" target="_blank">OpenAI Camera</a>
+<a href="https://learn.adafruit.com/memento-camera-quick-start-guide/fancy-camera" target="_blank">Fancy Camera</a>
 
 ## Challenges
 
-I had a lot of trouble when I was adding my own new features to the camera's code, especially with flash. The way flash works on a regular camera is that a bright light turns on, the camera takes a photo, and then that bright light turns off. That all happens in an instant. When I coded flash onto my camera, the light worked perfectly, and the images taken with flash on were noticably brighter. However, for some reason, when taking an image with flash, the screen wouldn't update when the image was taken, so it looked like an image was taken without flash. I spent an entire week trying to figure out why it wasn't working, but gave up and decided to work on other features. However, when I eventually came back to it, I figured out there was a command that updated the camera's screen, so if I updated the camera's screen once the flash would turn on, the screen would show an image taken with flash. I also had a little bit of trouble with making displays for the camera settings. These are the camera effects I currently display on the screen: prompt sent to OpenAI, camera filter, flash, LED level, LED color, and a countdown timer. If I displayed them all as text, they would either be super tiny and hard to read, or there wouldn't be enough space to fit all of them. To solve this problem, I created custom visual displays for LED level, LED color, and flash. I was unfamiliar with how to render polygons onto the screen, and so I looked up modules like vectorio and displayio. I figured out I could make my own polygons, but I would have to manually enter points for the vertices of the polygon. Eventually, I was able to make a lightning bolt that changes color with flash, and bars that change their levels and colors corresponding to the LEDs.
+I had a lot of trouble when I was adding my own new features to the camera's code, especially with flash. The way flash works on a regular camera is that a bright light turns on, the camera takes a photo, and then that bright light turns off. That all happens in an instant. When I coded flash onto my camera, the light worked perfectly, and the images taken with flash on were noticably brighter. However, for some reason, when taking an image with flash, the screen wouldn't update when the image was taken, so it looked like an image was taken without flash. I spent an entire week trying to figure out why it wasn't working, but gave up and decided to work on other features. However, when I eventually came back to it, I figured out there was a command that updated the camera's screen, so if I updated the camera's screen once the flash would turn on, the screen would show an image taken with flash.
+
+I also had a little bit of trouble with making displays for the camera settings. These are the camera effects I currently display on the screen: prompt sent to OpenAI, camera filter, flash, LED level, LED color, and a countdown timer. If I displayed them all as text, they would either be super tiny and hard to read, or there wouldn't be enough space to fit all of them. To solve this problem, I created custom visual displays for LED level, LED color, and flash. I was unfamiliar with how to render polygons onto the screen, and so I looked up modules like vectorio and displayio. I figured out I could make my own polygons, but I would have to manually enter points for the vertices of the polygon. Eventually, I was able to make a lightning bolt that changes color with flash, and bars that change their levels and colors corresponding to the LEDs.
 
 ## Next Steps
 
@@ -66,15 +71,21 @@ Right now, the board has a camera application that is very bare bones and can't 
 
 ## Images
 <img src="20250709_100959.png" width=378 height=504>
+An image of my Memento from the screen side, showcasing its buttons.
 <img src="20250709_101010.png" width=378 height=504>
+An image of my Memento from the camera side, showcasing the camera and the Neopixels.
 <img src="20250709_101029.png" width-378 height=504>
+An image of my Memento from the side with the ports and the MicroSD card.
 
 # Schematics 
 <img src="adafruit_products_schem (1).png">
+A schematic of most of the modules on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
 <img src="adafruit_products_mementoSchem2.png">
+A second schematic containing more modules on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
 <img src="adafruit_products_cam_schem.png">
+A third schematic that is about the camera on my Memento board.
 <a href="https://learn.adafruit.com/adafruit-ov5640-camera-breakout/downloads" target="_blank">Source</a>
 
 
