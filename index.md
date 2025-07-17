@@ -10,7 +10,7 @@ This project uses the Adafruit Memento camera to take a photo, and send that pho
 
 <!-- **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.** -->
 
-<img src="ShreyD.jpg" width="378" height="504">
+<img src="ShreyD.jpg" width="756" height="1008">
   
 # Final Milestone
 
