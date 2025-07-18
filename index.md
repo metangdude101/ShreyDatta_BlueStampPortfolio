@@ -1391,7 +1391,8 @@ while True:
         circlebutton1.radius = circlebuttonradius
 
     if pycam.select.rose:
-        circlebutton2.radius = circlebuttonradius```
+        circlebutton2.radius = circlebuttonradius
+```
 
 # Bill of Materials
 
