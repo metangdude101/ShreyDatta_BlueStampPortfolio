@@ -85,6 +85,7 @@ lis3dh.range = adafruit_lis3dh.RANGE_8_G
 rand = random.randint(0,9)
 rand2 = random.randint(0,99)
 
+"""
 if rand2 == 0:
     if rand == 0:
         pycam.tone(208, 0.4)
@@ -110,6 +111,9 @@ if rand2 == 0:
         pycam.tone(622, 0.4)
 else:
     pycam.tone(330/2, 0.2)
+"""
+
+pycam.tone(330/2, 0.2)
 
 pycam.mode = 0  # only mode 0 (JPEG) will work in this example
 
