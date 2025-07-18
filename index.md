@@ -229,12 +229,12 @@ settings = (
 )
 
 setting_displays = (
-    "Changing\nFlash",
-    "Changing\nLED Level",
-    "Changing\nLED Color",
-    "Changing\nCountdown",
-    "Changing\nEffect",
-    "Changing\nAI Prompt"
+    "Selected:\nFlash",
+    "Selected:\nLED Level",
+    "Selected:\nLED Color",
+    "Selected:\nCountdown",
+    "Selected:\nEffect",
+    "Selected:\nAI Prompt"
 )
 
 setting_labels = (
@@ -325,6 +325,10 @@ lightningrect = vectorio.Rectangle(pixel_shader=palette, width=20, height=25, x=
 
 lightningx = 200
 
+linearrect1 = vectorio.Rectangle(pixel_shader=palette, width=1, height=35, x=165, y=0, color_index=3)
+linearrect2 = vectorio.Rectangle(pixel_shader=palette, width=1, height=35, x=135, y=-5, color_index=3)
+
+
 # Hand made lightning symbol
 pointlist=[(0,0), (-5, 13), (3, 15), (0, 24), (13, 11), (5, 9), (10, 0)]
 lightning = vectorio.Polygon(pixel_shader=palette, points=pointlist, x=210-lightningx, y=5, color_index=1)
@@ -335,11 +339,11 @@ innerlightning = vectorio.Polygon(pixel_shader=palette, points=innerpointlist, x
 
 # Text that displays prompt on screen
 prompt_txt = label.Label(
-            terminalio.FONT, text=prompt_labels[prompt_index], color=0xFFFFFF, x=107, y=24, scale=1, padding_left=1
+            terminalio.FONT, text=prompt_labels[prompt_index], color=0xFFFFFF, x=105, y=24, scale=1, padding_left=1
         )
 
 effect_txt = label.Label(
-            terminalio.FONT, text=effects[current_effect], color=0xFFFFFF, x=107, y=8, scale=1, background_color=None, padding_left=1
+            terminalio.FONT, text=effects[current_effect], color=0xFFFFFF, x=105, y=8, scale=1, background_color=None, padding_left=1
         )
 
 countdown_txt = label.Label(
@@ -351,21 +355,27 @@ level_txt = label.Label(
         )
 
 setting_txt = label.Label(
-            terminalio.FONT, text=setting_displays[curr_setting], color=0xFFFFFF, x=170, y=8, scale=1
+            terminalio.FONT, text=setting_displays[curr_setting], color=0xFFFFFF, x=175, y=8, scale=1
         )
 
-bottom_sentences = [
+idle_sentences = [
     "Take a photo",
     "Select photo from SD",
-    "Send selected photo to AI",
-    "Select a setting",
-    "Change a setting's value"
+    "Cycle through settings",
+    "Change the setting"
 ]
 
-current_sentence = -1
+current_idle_sentence = -1
+
+select_sentences = [
+    "Send photo to AI",
+    "Cycle through photos"
+]
+
+current_select_sentence = -1
 
 bottom_txt = label.Label(
-            terminalio.FONT, text="", color = 0xFFFFFF, scale=1, line_spacing=1, x=5, y=10
+            terminalio.FONT, text="", color = 0xFFFFFF, scale=1, line_spacing=1, x=0, y=10
         )
 
 direcbuttonradius = 4
@@ -410,6 +420,8 @@ pycam._botbar.append(circlebutton2)
 pycam._botbar.append(screenrect)
 pycam._botbar.append(innerscreenrect)
 
+pycam._botbar.append(linearrect2)
+
 pycam._topbar.append(recttwo)
 
 pycam._topbar.append(lightningrect)
@@ -425,6 +437,7 @@ pycam._topbar.append(innerlightning)
 pycam._topbar.append(countdown_txt)
 pycam._topbar.append(setting_txt)
 
+pycam._topbar.append(linearrect1)
 
 allcolors = displayio.Palette(31)
 allcolors[0]  = 0xFFFFFF
@@ -691,6 +704,7 @@ def view_text(the_text):
     text_area = label.Label(terminalio.FONT, text=the_text,
                             color=0xFFFFFF, x=30, y=70, scale=text_scale)
     pycam.splash.append(text_area)
+
     pycam.display.refresh()
 
 # send image to OpenAI, print the returned text and save it as a text file
@@ -793,101 +807,182 @@ time.sleep(1)
 
 lis3dh.set_tap(1, 20)
 now = time.time()-6
+new_prompt_check = False
+view_check = False
 
 while True:
 
+    if new_prompt and not new_prompt_check:
+        new_prompt_check = True
+        now=time.time()-6
+    elif not new_prompt and new_prompt_check:
+        new_prompt_check = False
+        now=time.time()-6
+    
+    if view and not view_check:
+        view_check = True
+        now=time.time()-6
+    elif not view and view_check:
+        view_check = False
+        now=time.time()-6
+    
+
     if time.time() >= now+6:
         now=time.time()
-        current_sentence = (current_sentence + 1) % len(bottom_sentences)
-        bottom_txt.text = bottom_sentences[current_sentence]
+
+        if new_prompt:
+            current_select_sentence = (current_select_sentence + 1) % len(select_sentences)
+            bottom_txt.text = select_sentences[current_select_sentence]
+        elif view:
+            bottom_txt.text = "Continue"
+        else:
+            current_idle_sentence = (current_idle_sentence + 1) % len(idle_sentences)
+            bottom_txt.text = idle_sentences[current_idle_sentence]
+        
+        shutterbutton.color_index = 3
+        circlebutton1.color_index = 3
+        circlebutton2.color_index = 3
         direcbutton2.color_index = 3
         direcbutton4.color_index = 3
         direcbutton1.color_index = 3
         direcbutton3.color_index = 3
 
     if time.time() >= now+5:
-        if current_sentence == 0:
-            shutterbutton.color_index = 3
-        elif current_sentence == 1:
-            circlebutton2.color_index = 3
-        elif current_sentence == 2:
+        
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 3
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+        elif view:
             circlebutton1.color_index = 3
-        elif current_sentence == 3:
-            direcbutton2.color_index = 0
-            direcbutton4.color_index = 3
-        elif current_sentence == 4:
-            direcbutton1.color_index = 3
-            direcbutton3.color_index = 0
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 3
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 3
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 3
+                direcbutton3.color_index = 0
         pycam.display.refresh()
+    
     elif time.time() >= now+4:
-        if current_sentence == 0:
-            shutterbutton.color_index = 0
-        elif current_sentence == 1:
-            circlebutton2.color_index = 0
-        elif current_sentence == 2:
+
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 0
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+        elif view:
             circlebutton1.color_index = 0
-        elif current_sentence == 3:
-            direcbutton2.color_index = 3
-            direcbutton4.color_index = 0
-        elif current_sentence == 4:
-            direcbutton1.color_index = 0
-            direcbutton3.color_index = 3
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 0
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 0
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 0
+                direcbutton3.color_index = 3
         pycam.display.refresh()
+
     elif time.time() >= now+3:
-        if current_sentence == 0:
-            shutterbutton.color_index = 3
-        elif current_sentence == 1:
-            circlebutton2.color_index = 3
-        elif current_sentence == 2:
+        
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 3
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+        elif view:
             circlebutton1.color_index = 3
-        elif current_sentence == 3:
-            direcbutton2.color_index = 0
-            direcbutton4.color_index = 3
-        elif current_sentence == 4:
-            direcbutton1.color_index = 3
-            direcbutton3.color_index = 0
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 3
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 3
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 3
+                direcbutton3.color_index = 0
         pycam.display.refresh()
+    
     elif time.time() >= now+2:
-        if current_sentence == 0:
-            shutterbutton.color_index = 0
-        elif current_sentence == 1:
-            circlebutton2.color_index = 0
-        elif current_sentence == 2:
+        
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 0
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+        elif view:
             circlebutton1.color_index = 0
-        elif current_sentence == 3:
-            direcbutton2.color_index = 3
-            direcbutton4.color_index = 0
-        elif current_sentence == 4:
-            direcbutton1.color_index = 0
-            direcbutton3.color_index = 3
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 0
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 0
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 0
+                direcbutton3.color_index = 3
         pycam.display.refresh()
+
     elif time.time() >= now+1:
-        if current_sentence == 0:
-            shutterbutton.color_index = 3
-        elif current_sentence == 1:
-            circlebutton2.color_index = 3
-        elif current_sentence == 2:
+        
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 3
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+        elif view:
             circlebutton1.color_index = 3
-        elif current_sentence == 3:
-            direcbutton2.color_index = 0
-            direcbutton4.color_index = 3
-        elif current_sentence == 4:
-            direcbutton1.color_index = 3
-            direcbutton3.color_index = 0
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 3
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 3
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 0
+                direcbutton4.color_index = 3
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 3
+                direcbutton3.color_index = 0
         pycam.display.refresh()
+    
     elif time.time() >= now:
-        if current_sentence == 0:
-            shutterbutton.color_index = 0
-        elif current_sentence == 1:
-            circlebutton2.color_index = 0
-        elif current_sentence == 2:
+        
+        if new_prompt:
+            if current_select_sentence == 0:
+                circlebutton1.color_index = 0
+            elif current_select_sentence == 1:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+        elif view:
             circlebutton1.color_index = 0
-        elif current_sentence == 3:
-            direcbutton2.color_index = 3
-            direcbutton4.color_index = 0
-        elif current_sentence == 4:
-            direcbutton1.color_index = 0
-            direcbutton3.color_index = 3
+        else:
+            if current_idle_sentence == 0:
+                shutterbutton.color_index = 0
+            elif current_idle_sentence == 1:
+                circlebutton2.color_index = 0
+            elif current_idle_sentence == 2:
+                direcbutton2.color_index = 3
+                direcbutton4.color_index = 0
+            elif current_idle_sentence == 3:
+                direcbutton1.color_index = 0
+                direcbutton3.color_index = 3
         pycam.display.refresh()
 
     if new_prompt:
@@ -898,10 +993,17 @@ while True:
 
     pycam.keys_debounce()
 
-    if pycam.shutter.long_press:
+    if pycam.shutter.long_press and not view:
         #pycam.tone(330/2, 0.4)
+        shutterbutton.height=4
+        shutterbutton.y=2
+        pycam.display.refresh()
         pycam.autofocus()
-    if pycam.shutter.short_count:
+        shutterbutton.height=6
+        shutterbutton.y=0
+        pycam.display.refresh()
+    if pycam.shutter.short_count and not view:
+
         now = time.time()
 
         times = [time.time()+1, time.time()+2, time.time()+3]
@@ -911,11 +1013,16 @@ while True:
             countdowncolor=0xFFFFFF
 
             for i in range(0, countdown_times[current_countdown]):
+                if i == countdown_times[current_countdown] - 1:
+                    pycam.tone(330/2, 0.4)
+                else:
+                    pycam.tone(330/2, 0.1)
                 while time.time() != now+1+i:
                     if countdown_times[current_countdown]-i < 4:
                         countdowncolor = 0xFF0000
                     pycam.display_message(" " + str(countdown_times[current_countdown]-i) + " ", color=countdowncolor, scale=4)
                     pycam.blit(pycam.continuous_capture())
+                
 
         """
         pycam.tone(330/2, 0.2)
@@ -930,11 +1037,25 @@ while True:
                 #pycam.display_message("Flash!", color=0xFFFFFF)
 
         try:
-            
+            shutterbutton.color_index = 3
+            circlebutton1.color_index = 3
+            circlebutton2.color_index = 3
+            direcbutton2.color_index = 3
+            direcbutton4.color_index = 3
+            direcbutton1.color_index = 3
+            direcbutton3.color_index = 3
+            bottom_txt.text=""
+
+            shutterbutton.height=4
+            shutterbutton.y=2
+            pycam.display.refresh() 
+
             pycam.display_message(random.choice(snapmessages), color=0xFFFFFF)
             pycam.capture_jpeg()
 
-            # NEW
+            shutterbutton.height=6
+            shutterbutton.y=0
+            pycam.display.refresh()
             
             pycam.live_preview_mode()
             pycam.blit(pycam.continuous_capture())
@@ -967,6 +1088,8 @@ while True:
             setattr(pycam, "led_level", 0)
 
     if pycam.up.fell:
+        direcbutton1.radius = 3
+
         key = settings[curr_setting]
         if key:
             if key == "prompt":
@@ -1022,6 +1145,8 @@ while True:
                     pycam.display_message(effects[current_effect], color=effect_colors[current_effect])
 
     if pycam.down.fell:
+        direcbutton3.radius = 3
+
         key = settings[curr_setting]
         if key:
             if key == "prompt":
@@ -1076,6 +1201,8 @@ while True:
                     pycam.display_message(effects[current_effect], color=effect_colors[current_effect])
 
     if pycam.right.fell:
+        direcbutton2.radius = 3
+
         if new_prompt:
             file_index = (file_index - -1) % -len(all_images)
             filename = all_images[file_index]
@@ -1147,6 +1274,8 @@ while True:
             time.sleep(0.25)
 
     if pycam.left.fell:
+        direcbutton4.radius = 3
+
         if new_prompt:
             file_index = (file_index + -1) % -len(all_images)
             filename = all_images[file_index]
@@ -1213,16 +1342,20 @@ while True:
             time.sleep(0.25)
 
     if pycam.select.fell:
-        if not new_prompt:
+        circlebutton2.radius = 3
+
+        if not new_prompt and not view:
             file_index = -1
             new_prompt = True
             filename = all_images[file_index]
             load_image(bitmap, filename)
-        else:
+        elif not view:
             new_prompt = False
             pycam.display.refresh()
 
     if pycam.ok.fell:
+        circlebutton1.radius = 3
+
         if view:
             pycam.splash.pop()
             pycam.splash.pop()
@@ -1233,6 +1366,24 @@ while True:
             send_img(filename, prompts[prompt_index])
             new_prompt = False
             view = True
+    
+    if pycam.up.rose:
+        direcbutton1.radius = direcbuttonradius
+
+    if pycam.down.rose:
+        direcbutton3.radius = direcbuttonradius
+
+    if pycam.right.rose:
+        direcbutton2.radius = direcbuttonradius
+
+    if pycam.left.rose:
+        direcbutton4.radius = direcbuttonradius
+
+    if pycam.ok.rose:
+        circlebutton1.radius = circlebuttonradius
+
+    if pycam.select.rose:
+        circlebutton2.radius = circlebuttonradius
 ```
 
 # Bill of Materials
