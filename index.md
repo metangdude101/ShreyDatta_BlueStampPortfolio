@@ -85,13 +85,13 @@ As I stated earlier in the summary, the point of installing CircuitPython onto t
 
 # Schematics 
 <img src="adafruit_products_schem (1).png" width=640 height=427>
-A schematic of most of the modules on my Memento board.
+<p>A schematic of most of the modules on my Memento board.</p>
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
 <img src="adafruit_products_mementoSchem2.png" width=640 height=427>
-A second schematic containing more modules on my Memento board.
+<p>A second schematic containing more modules on my Memento board.</p>
 <a href="https://learn.adafruit.com/adafruit-memento-camera-board/downloads" target="_blank">Source</a>
 <img src="adafruit_products_cam_schem.png" width=640 height=427>
-A third schematic that is about the camera on my Memento board.
+<p>A third schematic that is about the camera on my Memento board.<\p>
 <a href="https://learn.adafruit.com/adafruit-ov5640-camera-breakout/downloads" target="_blank">Source</a>
 
 
