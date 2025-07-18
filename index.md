@@ -185,6 +185,7 @@ lis3dh.range = adafruit_lis3dh.RANGE_8_G
 rand = random.randint(0,9)
 rand2 = random.randint(0,99)
 
+"""
 if rand2 == 0:
     if rand == 0:
         pycam.tone(208, 0.4)
@@ -210,6 +211,9 @@ if rand2 == 0:
         pycam.tone(622, 0.4)
 else:
     pycam.tone(330/2, 0.2)
+"""
+
+pycam.tone(330/2, 0.2)
 
 pycam.mode = 0  # only mode 0 (JPEG) will work in this example
 
@@ -1058,7 +1062,6 @@ while True:
             pycam.display.refresh()
             
             pycam.live_preview_mode()
-            pycam.blit(pycam.continuous_capture())
         except TypeError as exception:
             pycam.display_message("Failed", color=0xFF0000)
             time.sleep(0.5)
@@ -1075,6 +1078,11 @@ while True:
         all_images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
 
         the_image = all_images[-1]
+
+        decoder.open(the_image)
+        decoder.decode(bitmap)
+        pycam.blit(bitmap)
+
         pycam.display_message(random.choice(thinkmessages), color=0xFFFFFF)
         send_img(the_image, prompts[prompt_index])
         """
@@ -1383,8 +1391,7 @@ while True:
         circlebutton1.radius = circlebuttonradius
 
     if pycam.select.rose:
-        circlebutton2.radius = circlebuttonradius
-```
+        circlebutton2.radius = circlebuttonradius```
 
 # Bill of Materials
 
