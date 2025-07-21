@@ -671,7 +671,9 @@ pycam.display.refresh()
 view = False
 new_prompt = False
 file_index = -1
+```
 
+```python
 """
 
 This next section is the code for sending the image to OpenAI.
