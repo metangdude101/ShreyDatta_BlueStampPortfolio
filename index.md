@@ -95,7 +95,6 @@ As I stated earlier in the summary, the point of installing CircuitPython onto t
 <img src="adafruit_products_cam_schem.png" width=640 height=427>
 <p>A third schematic that is about the camera on my Memento board.<\p>
 <a href="https://learn.adafruit.com/adafruit-ov5640-camera-breakout/downloads" target="_blank">Source</a>
-<p></p>
 
 
 # Code
